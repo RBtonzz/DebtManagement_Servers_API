@@ -10,7 +10,7 @@ const myTransactionSchema = new mongoose.Schema({
 });
 
 const myDebtSchema = new mongoose.Schema({
-  creditorName: { type: String, required: true, trim: true }, // ชื่อเจ้าหนี้
+  creditorName: { type: String, required: true, trim: true },
   phone: { type: String, default: '' },
   note: { type: String, default: '' },
   transactions: [myTransactionSchema],

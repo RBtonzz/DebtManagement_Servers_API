@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const transactionSchema = new mongoose.Schema({
-  type: { type: String, enum: ['add', 'pay'], required: true }, // add=เพิ่มหนี้, pay=ชำระ
+  type: { type: String, enum: ['add', 'pay'], required: true },
   amount: { type: Number, required: true },
   paymentMethod: { type: String, enum: ['cash', 'transfer'], default: 'cash' },
   note: { type: String, default: '' },
