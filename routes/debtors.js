@@ -12,7 +12,7 @@ const {
 } = require('../controllers/debtorController');
 
 router.get('/', optionalAuth, getAllDebtors);
-router.get('/:id', protect, adminOnly, getDebtor);
+router.get('/:id', optionalAuth, getDebtor);
 router.post('/', protect, adminOnly, createDebtor);
 router.post('/:id/transaction', protect, adminOnly, addTransaction);
 router.put('/:id/transaction/:txId', protect, adminOnly, updateTransaction);

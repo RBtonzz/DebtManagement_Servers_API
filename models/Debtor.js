@@ -14,7 +14,8 @@ const debtorSchema = new mongoose.Schema({
   phone: { type: String, default: '' },
   note: { type: String, default: '' },
   transactions: [transactionSchema],
-  isActive: { type: Boolean, default: true }
+  isActive: { type: Boolean, default: true },
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null }
 }, { timestamps: true });
 
 debtorSchema.virtual('totalDebt').get(function() {

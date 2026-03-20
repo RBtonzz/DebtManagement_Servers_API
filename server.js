@@ -22,6 +22,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/debtors', require('./routes/debtors'));
 app.use('/api/mydebt', require('./routes/mydebt'));
 app.use('/api/history', require('./routes/history'));
+app.use('/api/public', require('./routes/public'));
 
 // Health check (prevent sleep)
 app.get('/api/ping', (req, res) => res.json({ status: 'ok', time: new Date() }));
