@@ -32,6 +32,9 @@ app.use('/api/mydebt', require('./routes/mydebt'));
 app.use('/api/history', require('./routes/history'));
 app.use('/api/public', require('./routes/public'));
 
+// Root
+app.get('/', (_req, res) => res.json({ message: '🚀 Server is running!', time: new Date() }));
+
 // Health check (prevent sleep)
 app.get('/api/ping', (req, res) => res.json({ status: 'ok', time: new Date() }));
 
