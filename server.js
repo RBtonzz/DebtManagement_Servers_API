@@ -12,6 +12,14 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Request timeout 10s
+app.use((_req, res, next) => {
+  res.setTimeout(10000, () => {
+    res.status(503).json({ message: 'Server ไม่ตอบสนอง กรุณาลองใหม่อีกครั้ง' });
+  });
+  next();
+});
+
 // Connect MongoDB
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB Connected'))
@@ -26,6 +34,18 @@ app.use('/api/public', require('./routes/public'));
 
 // Health check (prevent sleep)
 app.get('/api/ping', (req, res) => res.json({ status: 'ok', time: new Date() }));
+
+// Keep-alive: ping ตัวเองทุก 4 นาที ป้องกัน Render sleep
+if (process.env.RENDER_URL) {
+  setInterval(async () => {
+    try {
+      await fetch(`${process.env.RENDER_URL}/api/ping`);
+      console.log('🏓 Keep-alive ping sent');
+    } catch (err) {
+      console.error('❌ Keep-alive failed:', err.message);
+    }
+  }, 4 * 60 * 1000);
+}
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () =>

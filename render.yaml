@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: debt-management-api
+    runtime: docker
+    plan: free
+    region: singapore
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRE
+        value: 15d
+      - key: PORT
+        value: 8080
+      - key: RENDER_URL
+        value: https://debt-management-mtonz.onrender.com
