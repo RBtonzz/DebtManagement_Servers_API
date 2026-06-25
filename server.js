@@ -14,8 +14,8 @@ app.use(express.json());
 
 // Request timeout 10s
 app.use((_req, res, next) => {
-  res.setTimeout(10000, () => {
-    res.status(503).json({ message: 'Server ไม่ตอบสนอง กรุณาลองใหม่อีกครั้ง' });
+  res.setTimeout(30000, () => {
+    res.status(503).json({ message: 'Server ບໍ່ຕອບສະໜອງ, ກະລູນາລອງໃໝ່ ຫຼື ເປຶດ VPN' });
   });
   next();
 });
