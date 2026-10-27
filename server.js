@@ -21,9 +21,13 @@ app.use((_req, res, next) => {
 });
 
 // Connect MongoDB
-mongoose.connect(process.env.MONGODB_URI)
+let dbError = null;
+const dbReady = mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB Connected'))
-  .catch(err => console.error('❌ MongoDB Error:', err));
+  .catch(err => {
+    dbError = err.message;
+    console.error('❌ MongoDB Error:', err);
+  });
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
@@ -33,7 +37,9 @@ app.use('/api/history', require('./routes/history'));
 app.use('/api/public', require('./routes/public'));
 
 // Root
-app.get('/', (_req, res) => {
+app.get('/', async (_req, res) => {
+  // บน Vercel request แรก (cold start) อาจมาก่อนที่ MongoDB จะต่อเสร็จ
+  await dbReady;
   const dbStatus = mongoose.connection.readyState === 1;
   res.send(`<!DOCTYPE html>
 <html lang="en">
@@ -136,6 +142,10 @@ app.get('/', (_req, res) => {
       <span class="label">Database</span>
       <span class="value ${dbStatus ? 'status-ok' : 'status-err'}">${dbStatus ? '✅ Connected' : '❌ Disconnected'}</span>
     </div>
+    ${!dbStatus ? `<div class="row">
+      <span class="label">DB Error</span>
+      <span class="value status-err">${!process.env.MONGODB_URI ? 'MONGODB_URI not set' : (dbError || 'unknown')}</span>
+    </div>` : ''}
     <div class="row">
       <span class="label">Environment</span>
       <span class="value">${process.env.NODE_ENV || 'development'}</span>
