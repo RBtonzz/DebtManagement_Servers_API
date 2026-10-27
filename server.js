@@ -160,11 +160,11 @@ app.get('/', (_req, res) => {
 // Health check (prevent sleep)
 app.get('/api/ping', (req, res) => res.json({ status: 'ok', time: new Date() }));
 
-// Keep-alive: ping ตัวเองทุก 4 นาที ป้องกัน Render sleep
-if (process.env.RENDER_URL) {
+// Keep-alive: ping ตัวเองทุก 4 นาที (ไม่ต้องใช้บน Vercel เพราะเป็น serverless)
+if (process.env.API_URL && !process.env.VERCEL) {
   setInterval(async () => {
     try {
-      await fetch(`${process.env.RENDER_URL}/api/ping`);
+      await fetch(`${process.env.API_URL}/api/ping`);
       console.log('🏓 Keep-alive ping sent');
     } catch (err) {
       console.error('❌ Keep-alive failed:', err.message);
@@ -176,3 +176,5 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () =>
   console.log(`🚀 Server running on port ${PORT}`)
 );
+
+module.exports = app;
